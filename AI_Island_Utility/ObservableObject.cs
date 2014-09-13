@@ -10,8 +10,6 @@ namespace AI_Island_Utility
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {
-        #region INotifyPropertyChanged Members
-
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
@@ -31,9 +29,6 @@ namespace AI_Island_Utility
                 this.PropertyChanged(this, e);
             }
         }
-
-        #region Debugging Aides
-
 
         public virtual void VerifyPropertyName(string propertyName)
         {
