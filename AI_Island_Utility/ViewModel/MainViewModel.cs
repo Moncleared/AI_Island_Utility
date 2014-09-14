@@ -5,6 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using AI_Island_Utility.Extensions;
+using AI_Island_Utility.Model;
 
 namespace AI_Island_Utility.ViewModel
 {
@@ -13,76 +14,21 @@ namespace AI_Island_Utility.ViewModel
 
         public MainViewModel()
         {
-            Database = "dayz_epoch";
-            Port = "3306";
+            DatabaseModel = new DatabaseModel();
+            DatabaseModel.Database = "dayz_epoch";
+            DatabaseModel.Port = "3306";
         }
 
         #region Observable Properties for View
-        private string fUsername;
-        public string Username
+        private DatabaseModel fDatabaseModel;
+        public DatabaseModel DatabaseModel
         {
-            get { return fUsername; }
+            get { return fDatabaseModel; }
             set
             {
-                if (value != fUsername)
+                if (value != fDatabaseModel)
                 {
-                    fUsername = value;
-                    RaisePropertyChanged("Username");
-                }
-            }
-        }
-
-        private string fPassword;
-        public string Password
-        {
-            get { return fPassword; }
-            set
-            {
-                if (value != fPassword)
-                {
-                    fPassword = value;
-                    RaisePropertyChanged("Password");
-                }
-            }
-        }
-
-        private string fHost;
-        public string Host
-        {
-            get { return fHost; }
-            set
-            {
-                if (value != fHost)
-                {
-                    fHost = value;
-                    RaisePropertyChanged("Host");
-                }
-            }
-        }
-
-        private string fPort;
-        public string Port
-        {
-            get { return fPort; }
-            set
-            {
-                if (value != fPort)
-                {
-                    fPort = value;
-                    RaisePropertyChanged("Port");
-                }
-            }
-        }
-
-        private string fDatabase;
-        public string Database
-        {
-            get { return fDatabase; }
-            set
-            {
-                if (value != fDatabase)
-                {
-                    fDatabase = value;
+                    fDatabaseModel = value;
                     RaisePropertyChanged("Database");
                 }
             }
@@ -109,10 +55,10 @@ namespace AI_Island_Utility.ViewModel
         public void LoginMySql(PasswordBox pPasswordBox)
         {
             string vConnectionString;
-            string vUsername = this.Username.Trim();
-            string vHost = this.Host.Trim();
-            string vDatabase = this.Database.Trim();
-            string vPort = this.Port.Trim();
+            string vUsername = this.DatabaseModel.Username.Trim();
+            string vHost = this.DatabaseModel.Host.Trim();
+            string vDatabase = this.DatabaseModel.Database.Trim();
+            string vPort = this.DatabaseModel.Port.Trim();
 
             //This is a bad practice, exposing a password into plain text. I don't care for right now, we can deal with this later
             //Notice we're using an "Extension" method here though, .ConvertToUnsecureString is defined in SecurityExtensions.cs

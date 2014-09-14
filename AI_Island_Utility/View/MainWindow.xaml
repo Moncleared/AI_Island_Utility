@@ -22,21 +22,21 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" VerticalAlignment="Top" Content="Database Server" />
-        <TextBox Margin="5" Grid.Row="0" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding Host, Mode=TwoWay}" Width="300" />
+        <TextBox Margin="5" Grid.Row="0" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding DatabaseModel.Host, Mode=TwoWay}" Width="300" />
 
         <!-- Typically I would use a ColumnDefinition here and not use Margin to place an element, but I'm really lazy right now -->
         <Label Grid.Row="0" Margin="0 0 50 0" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Port" />
-        <TextBox Margin="5" Grid.Row="0" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Right" Text="{Binding Port, Mode=TwoWay}" Width="75" />
+        <TextBox Margin="5" Grid.Row="0" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Right" Text="{Binding DatabaseModel.Port, Mode=TwoWay}" Width="75" />
  
         <Label Grid.Row="1" VerticalAlignment="Top" Content="Database Username" />
-        <TextBox Margin="5" Grid.Row="1" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Username, Mode=TwoWay}" />
+        <TextBox Margin="5" Grid.Row="1" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding DatabaseModel.Username, Mode=TwoWay}" />
 
         <Label Grid.Row="2" VerticalAlignment="Top" Content="Database Password" />
         <PasswordBox Name="fPasswordBox" Margin="5" Grid.Row="2" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
 
         <Label Grid.Row="3" VerticalAlignment="Top" Content="Database Name" />
-        <TextBox Margin="5" Grid.Row="3" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Database, Mode=TwoWay}" />
+        <TextBox Margin="5" Grid.Row="3" VerticalAlignment="Bottom" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding DatabaseModel.Database, Mode=TwoWay}" />
 
-        <Button Margin="5" Grid.Row="4" Content="Login" Height="32" VerticalAlignment="Top" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=fPasswordBox}" />
+        <Button Margin="5" Grid.Row="4" Content="Connect" Height="32" VerticalAlignment="Top" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=fPasswordBox}" />
     </Grid>
 </Controls:MetroWindow>
