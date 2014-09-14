@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using MySql.Data.MySqlClient;
+using System;
 using System.Windows;
+using System.Windows.Controls;
+using AI_Island_Utility.Extensions;
 
-namespace AI_Island_Utility
+namespace AI_Island_Utility.ViewModel
 {
-    public class ViewModel : ObservableObject
+    public class MainViewModel : ViewModelBase
     {
 
-        #region Observable Properties for View
-        private string fUserName;
-        public string UserName
+        public MainViewModel()
         {
-            get { return fUserName; }
+            Database = "dayz_epoch";
+            Port = "3306";
+        }
+
+        #region Observable Properties for View
+        private string fUsername;
+        public string Username
+        {
+            get { return fUsername; }
             set
             {
-                if (value != fUserName)
+                if (value != fUsername)
                 {
-                    fUserName = value;
-                    OnPropertyChanged("UserName");
+                    fUsername = value;
+                    RaisePropertyChanged("Username");
                 }
             }
         }
@@ -36,7 +41,7 @@ namespace AI_Island_Utility
                 if (value != fPassword)
                 {
                     fPassword = value;
-                    OnPropertyChanged("Password");
+                    RaisePropertyChanged("Password");
                 }
             }
         }
@@ -50,7 +55,7 @@ namespace AI_Island_Utility
                 if (value != fHost)
                 {
                     fHost = value;
-                    OnPropertyChanged("Host");
+                    RaisePropertyChanged("Host");
                 }
             }
         }
@@ -64,7 +69,7 @@ namespace AI_Island_Utility
                 if (value != fPort)
                 {
                     fPort = value;
-                    OnPropertyChanged("Port");
+                    RaisePropertyChanged("Port");
                 }
             }
         }
@@ -78,38 +83,47 @@ namespace AI_Island_Utility
                 if (value != fDatabase)
                 {
                     fDatabase = value;
-                    OnPropertyChanged("Database");
+                    RaisePropertyChanged("Database");
                 }
             }
         }
         #endregion
 
         #region Events
-        private ICommand fLoginCommand;
-        public ICommand LoginCommand
+        private RelayCommand<PasswordBox> fLoginCommand;
+        public RelayCommand<PasswordBox> LoginCommand
         {
             get
             {
                 if (fLoginCommand == null)
                 {
-                    fLoginCommand = new RelayCommand(param => LoginMySql());
+                    fLoginCommand = new RelayCommand<PasswordBox>((s) => LoginMySql(s));
                 }
                 return fLoginCommand;
             }
         }
 
+
         #endregion
 
-        public void LoginMySql()
+        public void LoginMySql(PasswordBox pPasswordBox)
         {
             string vConnectionString;
-            string vUsername = this.UserName.Trim();
-            string vPassword = this.Password.Trim();
+            string vUsername = this.Username.Trim();
             string vHost = this.Host.Trim();
-            string vPort = this.Port.Trim();
             string vDatabase = this.Database.Trim();
+            string vPort = this.Port.Trim();
 
-            vConnectionString = string.Format("server={0};uid={1};pwd={2};database={3};", vHost, vUsername, vPassword, vDatabase);
+            //This is a bad practice, exposing a password into plain text. I don't care for right now, we can deal with this later
+            //Notice we're using an "Extension" method here though, .ConvertToUnsecureString is defined in SecurityExtensions.cs
+            //Extensions essentially allow you to add Methods to already existing classes that you may or may not have created (SecureString for example)
+            string vPassword = string.Empty;
+            if (pPasswordBox != null)
+            {
+                vPassword = pPasswordBox.SecurePassword.ConvertToUnsecureString();
+            }
+
+            vConnectionString = string.Format("server={0};port={1};uid={2};pwd={3};database={4};", vHost, vPort, vUsername, vPassword, vDatabase);
 
             try
             {
@@ -117,6 +131,7 @@ namespace AI_Island_Utility
                 {
                     vMySqlConnection.ConnectionString = vConnectionString;
                     vMySqlConnection.Open();
+                    MessageBox.Show("Successfully connected to the database!");
                 }
             }
             catch (MySqlException vException)
