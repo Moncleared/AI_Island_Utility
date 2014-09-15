@@ -43,6 +43,7 @@ namespace AI_Island_Utility.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<ScriptViewModel>();
         }
 
         public MainViewModel Main
@@ -50,6 +51,14 @@ namespace AI_Island_Utility.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        public ScriptViewModel Script
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ScriptViewModel>();
             }
         }
         

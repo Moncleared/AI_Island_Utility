@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using AI_Island_Utility.Extensions;
 using AI_Island_Utility.Model;
+using Microsoft.Practices.ServiceLocation;
+using AI_Island_Utility.View;
 
 namespace AI_Island_Utility.ViewModel
 {
@@ -54,6 +56,8 @@ namespace AI_Island_Utility.ViewModel
 
         public void LoginMySql(PasswordBox pPasswordBox)
         {
+
+            //need to do null check values here, calling .Trim() on null = bad lawl
             string vConnectionString;
             string vUsername = this.DatabaseModel.Username.Trim();
             string vHost = this.DatabaseModel.Host.Trim();
@@ -70,6 +74,9 @@ namespace AI_Island_Utility.ViewModel
             }
 
             vConnectionString = string.Format("server={0};port={1};uid={2};pwd={3};database={4};", vHost, vPort, vUsername, vPassword, vDatabase);
+
+            //this is for debugging so i don't have to type the contents into the ui every time
+            //i have a local mysql database installed on my laptop so connection actually works
             vConnectionString = string.Format("server=localhost;port=3306;uid=root;pwd=test123;database=dayz_epoch;", vHost, vPort, vUsername, vPassword, vDatabase);
 
             try
@@ -78,7 +85,11 @@ namespace AI_Island_Utility.ViewModel
                 {
                     vMySqlConnection.ConnectionString = vConnectionString;
                     vMySqlConnection.Open();
+                    
+                    ScriptView vScriptView = new ScriptView();
+                    vScriptView.ShowDialog();
 
+                    /*
                     using (MySqlCommand vMySqlCommand = new MySqlCommand())
                     {
                         vMySqlCommand.CommandText = "DELETE FROM `object_data` WHERE `ObjectUID` = '0000500001393';DELETE FROM `object_data` WHERE `ObjectUID` = '0000500001394';DELETE FROM `object_data` WHERE `ObjectUID` = '0000500001395';DELETE FROM `object_data` WHERE `ObjectUID` = '0000500001396'; DELETE FROM `object_data` WHERE `ObjectUID` = '0000500001397'; DELETE FROM `object_data` WHERE `ObjectUID` = '0000500001398';";
@@ -91,6 +102,7 @@ namespace AI_Island_Utility.ViewModel
 
                         int vReturnValue = vMySqlCommand.ExecuteNonQuery();
                     }
+                     */
                 }
             }
             catch (MySqlException vException)
